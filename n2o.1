@@ -5,10 +5,10 @@ n2o \- Protocol and Application Server
 .SH INTRO
 .LP
 The
-\fIn2o\fR\&defines the way you create, configure and run
+\fIn2o\fR\& defines the way you create, configure and run
 arbitrary applications and protocols inside some hosts, into
 which N2O can be injected, such as
-\fIcowboy\fR\&and
+\fIcowboy\fR\& and
 \fIemqttd\fR\&.
 Each application can spawn its instance in its way like
 web pages spawn WebSocket connections, workflow engines
@@ -17,7 +17,7 @@ and chatroom processes. With N2O everything is managed by protocols.
 .LP
 N2O shipped to work in two modes:
 1) inside
-\fIn2o_mqtt\fR\&workers;
+\fIn2o_mqtt\fR\& workers;
 2) inside cowboy processes, implemented in
 \fIn2o_stream\fR\&.
 In the first case, the MQTT server used between clients and server workers.
@@ -29,7 +29,7 @@ The N2O itself is an embeddable protocol loop in
 \fIn2o_proto\fR\&.
 However, besides that, it handles cache and sessions
 along with flexible
-\fIn2o_pi\fR\&processes with no ownership restriction.
+\fIn2o_pi\fR\& processes with no ownership restriction.
 It also introduces AES/CBC—128 pickling and BERT/JSON encoder.
 
 .SH TYPES
@@ -90,9 +90,9 @@ on each incoming request.
 .LP
 N2O provides RPC over MQ mechanism for MQTT devices.
 N2O spawns a set of
-\fIn2o_mqtt\fR\&workers
+\fIn2o_mqtt\fR\& workers
 as
-\fIn2o_pi\fR\&processes that listen to
+\fIn2o_pi\fR\& processes that listen to
 events topic. The responses send to actions topic, which is
 subscribed automatically on MQTT session init.
 .nf
@@ -103,7 +103,7 @@ events/:vsn/:node/:module/:client
 .SH RPC WebSocket
 .LP
 In pure WebSocket case, N2O implements
-\fIn2o_stream\fR\&as cowboy module supporting binary and text messages.
+\fIn2o_stream\fR\& as cowboy module supporting binary and text messages.
 .nf
 #binary { data :: binary() }.
 #text { data :: binary() }.
@@ -151,7 +151,7 @@ option in sys.config.
 .LP
 N2O is the facade of the following services: cache, MQ, message formatting,
 sessions, pickling and protocol loops. The other part of N2O is
-\fIn2o_pi\fR\&module
+\fIn2o_pi\fR\& module
 for spawning supervised application processes to use N2O API. In this simple
 configuration, you may set any implementation for any service.
 .LP
