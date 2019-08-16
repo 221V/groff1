@@ -9,5 +9,6 @@ v1:do("n2o_ftp.htm").
 v1:do("n2o.ua.htm").
 
 c(v2).
+v2:do("n2o.htm").
 v2:do("n2o.ua.htm").
 ```

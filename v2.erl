@@ -76,12 +76,14 @@ head([_|T], A) -> head(T, A).
 
 write2new(F, S) ->
   file:write_file(F ++ ".2",
-  io_lib:fwrite("~s", [
-  ?MODULE:trim(
-  unicode:characters_to_binary(S,utf8))]), [append]).
+  io_lib:fwrite("~ts", [
+  %?MODULE:trim(
+  unicode:characters_to_binary(S,utf8)
+  %)
+  ]), [append]).
 
 % aka mad_man:trim
-trim(A) when is_list(A) -> trim(unicode:characters_to_binary(A));
+trim(A) when is_list(A) -> trim(unicode:characters_to_binary(A,utf8));
 trim(A) when is_binary(A) -> re:replace(A, "(^\\s+)|(\\s+$)", "", [global,{return,list}]).
 
 
