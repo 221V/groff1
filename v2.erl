@@ -4,7 +4,8 @@
 -compile([export_all, nowarn_export_all]).
 
 do(FileName) ->
-  {#xmlElement{content=[#xmlElement{content=Head}, BodyTree | _]}, _} = xmerl_scan:file(FileName),
+  %{#xmlElement{content=[#xmlElement{content=Head}, BodyTree | _]}, _} = xmerl_scan:file(FileName),
+  {#xmlElement{content=[_, #xmlElement{content=Head}, _, BodyTree | _]}, _} = xmerl_scan:file(FileName),
   %io:format("~p~n",[BodyTree]),
   FN = string:join(lists:reverse(tl(lists:reverse(string:tokens(FileName,".")))),"."),
   Title = filename:basename(FN),
