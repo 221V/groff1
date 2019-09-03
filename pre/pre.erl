@@ -20,8 +20,14 @@ do(FileName, Lang) ->
 
 
 % prepare all htm files in dir %% Lang == active lang at switch lang button
-do2(_Lang) ->
-  ok.
+do(Lang) ->
+  Z = lists:all(
+    fun(X) -> do(X, Lang) == ok end,
+    filelib:wildcard("*.html") ++ filelib:wildcard("*.htm")),
+  case Z of
+    true -> ok;
+    false -> error
+  end.
 
 
 % insert new lang into switch lang list in htm file
@@ -52,6 +58,8 @@ show(#xmlElement{name=h1,content=C}, SP, L, _In, RA) ->
   [ [SP, "<h1>", child(C, "", L, in_h1, []), "</h1>", "\n"] |RA];
 show(#xmlElement{name=h3,content=C}, SP, L, _In, RA) ->
   [ [SP, "<h3>", child(C, "", L, in_h3, []), "</h3>", "\n"] |RA];
+show(#xmlElement{name=nobr,content=C}, SP, L, _In, RA) ->
+  [ [SP, "<nobr>", child(C, "", L, in_nobr, []), "</nobr>"] |RA];
 show(#xmlElement{name=center,content=C}, SP, L, _In, RA) ->
   [ [SP, "<center>", child(C, "", L, in_center, []), "</center>", "\n"] |RA];
 show(#xmlElement{name=ul,content=C}, SP, L, In, RA) ->
@@ -94,6 +102,10 @@ show(#xmlElement{name='div',attributes=[#xmlAttribute{name=class, value=AV}|_],c
   [ [SP, "<div class=\"", AV, "\">", child(C, SP, L, in_p, []), "</div>", "\n"] |RA];
 show(#xmlElement{name='div',content=C}, SP, L, _In, RA) ->
   [ [SP, "<div>", child(C, SP, L, in_p, []), "</div>", "\n"] |RA];
+show(#xmlElement{name=blockquote,content=C}, SP, L, _In, RA) ->
+  [ [SP, "<blockquote>", child(C, SP, L, in_p, []), "</blockquote>", "\n"] |RA];
+show(#xmlElement{name=iframe}, SP, _L, _In, RA) ->
+  [ [SP, "<iframe >", "</iframe>", "\n"] |RA]; %% params here
 show(#xmlElement{name=figure,content=C}, SP, L, In, RA) ->
   [ [SP, "<figure>", "\n", child(C, "  " ++ SP, L, In, []), SP, "</figure>", "\n"] |RA];
 show(#xmlElement{name=figcaption,content=C}, SP, L, _In, RA) ->
@@ -166,7 +178,7 @@ show(#xmlText{value=V,pos=_Z}, SP, _L, In, RA) when In =:= in_p; In =:= {in_p,la
       [V02|RA]
   end;
 show(#xmlText{value=V}, _SP, _L, In, RA)
-when In =:= in_a; In =:= in_h1; In =:= in_h3; In =:= in_sub; In =:= in_sup; In =:= in_b; In =:= in_figcaption ->
+when In =:= in_a; In =:= in_h1; In =:= in_h3; In =:= in_nobr; In =:= in_sub; In =:= in_sup; In =:= in_b; In =:= in_figcaption ->
   [ esc_m(V, []) |RA];
 show(#xmlText{value=V}, _SP, _L, in_code, RA) ->
   [ esc_m(V, []) |RA];
