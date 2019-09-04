@@ -128,6 +128,8 @@ show(#xmlElement{name=sup,content=C}, SP, L, _In, RA) ->
   [ ["<sup>", child(C, SP, L, in_sup, []), "</sup>"] |RA];
 show(#xmlElement{name=footer,content=C}, SP, L, _In, RA) ->
   [ [SP, "<footer>", child(C, "", L, in_footer, []), "</footer>", "\n"] |RA];
+show(#xmlElement{name=span,attributes=[#xmlAttribute{name=class, value=AV}|_],content=C}, SP, L, in_footer, RA) ->
+  [ [SP, " <span class=\"", AV, "\">", child(C, "", L, in_footer, []), "</span> "] |RA];
 show(#xmlElement{name=span,content=C}, SP, L, In, RA) ->
   [ [SP, " <span>", child(C, "", L, In, []), "</span> "] |RA];
 show(#xmlElement{name=br}, _SP, _L, _In, RA) ->
