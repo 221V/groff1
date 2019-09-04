@@ -113,15 +113,15 @@ show(#xmlElement{name=figcaption,content=C}, SP, L, _In, RA) ->
 show(#xmlElement{name=code,content=C}, SP, L, _In, RA) ->
   [ [SP, "<code>", "\n", child(C, SP, L, in_code, []), "\n", SP, "</code>", "\n"] |RA];
 show(#xmlElement{name=img,attributes=[#xmlAttribute{name=src, value=SV}|_]}, SP, _L, in_a, RA) ->
-  [ [SP, "<img src=\"", SV, "\" \>"] |RA];
+  [ [SP, "<img src=\"", SV, "\" />"] |RA];
 show(#xmlElement{name=img,attributes=[#xmlAttribute{name=src, value=SV},#xmlAttribute{name=width, value=WV}|_]}, SP, _L, in_center, RA) ->
-  [ [SP, "<img src=\"", SV, "\" width=\"", WV, "\" \>"] |RA];
+  [ [SP, "<img src=\"", SV, "\" width=\"", WV, "\" />"] |RA];
 show(#xmlElement{name=img,attributes=[#xmlAttribute{name=src, value=SV}|_]}, SP, _L, in_center, RA) ->
-  [ [SP, "<img src=\"", SV, "\" \>"] |RA];
+  [ [SP, "<img src=\"", SV, "\" />"] |RA];
 show(#xmlElement{name=img,attributes=[#xmlAttribute{name=src, value=SV},#xmlAttribute{name=width, value=WV}|_]}, _SP, _L, _In, RA) ->
-  [ ["<img src=\"", SV, "\" width=\"", WV, "\" \>"] |RA];
+  [ ["<img src=\"", SV, "\" width=\"", WV, "\" />"] |RA];
 show(#xmlElement{name=img,attributes=[#xmlAttribute{name=src, value=SV}|_]}, SP, _L, _In, RA) ->
-  [ [SP, "<img src=\"", SV, "\" \>", "\n"] |RA];
+  [ [SP, "<img src=\"", SV, "\" />", "\n"] |RA];
 show(#xmlElement{name=sub,content=C}, SP, L, _In, RA) ->
   [ ["<sub>", child(C, SP, L, in_sub, []), "</sub>"] |RA];
 show(#xmlElement{name=sup,content=C}, SP, L, _In, RA) ->
