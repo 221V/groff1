@@ -214,7 +214,7 @@ child([Node | MoreNodes], SP, L, In, RA) -> child(MoreNodes, SP, L, In, show(Nod
 
 show_h(HeadT) ->
   N = "15",
-  P = "../",
+  P = "/",
   [ "<!DOCTYPE html>
 <html>
 <head>
