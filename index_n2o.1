@@ -1,0 +1,154 @@
+.TH index_n2o 1 "index_n2o" "Synrc Research Center" "N2O"
+.SH NAME
+index_n2o
+.SH  СИНОПСИС
+.LP
+ N2O — це вбудовувана бібліотека протокольних циклів обробки повідомлень для WebSocket, MQTT та TCP серверів. До базової функціональності бібліотеки входять: управління процесами; кільця віртуальних вузлів для обробки запитів; сервіси сесій, кодування, шини та кешування. 
+
+
+.LP
+ MAY 2019 © \fI5HT\fR\&\fIISC\fR\&
+ VER 6.7 6.6 6.5 
+.SH  ВИКОРИСТАННЯ
+.LP
+ Ви можете сміливо використовувати з N2O ваш улюблений Erlang чи Elixir менеджер пакетів: mad, mix, rebar3 чи erlang.mk. MAD — наш власний менеджер пакетів, який ми постійно вдосконялюємо та підтримуємо: 
+.nf
+
+ $ mad get n2o
+ $ cd deps/n2o
+ $ mad dep com pla rep
+        
+.fi
+
+.SH  Точки підключення протоколів
+.LP
+ Перелік типів кінцевих точок підключення протоколів, які підтримуються EMQ, та є доступними для N2O програм: WebSockets, MQTT, MQTT-SN, TCP, UDP, CoAP. Нормальним є використання N2O у якості веб фреймворка або сервера веб додатків з передачею даних по WebSockets, але для IoT та MQTT програм можна використовувати UDP чи SCTP протоколи, для забезпечення консистентності доставки повідомлень на рівні програми. Використовуючи MQTT в якості транспорту ми розширюємо підтримуваний набір протоколів кінцевих точок підключення. 
+.SH  MQTT
+.LP
+\fIEMQ\fR\& — брокер MQTT з відкритим кодом, написаний Feng Lee. N2O — це сумісний з EMQ плагін, являє собою заздалегідь визначені клієнти MQTT, які у вигляді кільця віртуальних вузлів обробляють протокольні запити та відповідають на клієнтські топіки, відповідно до класичної схеми "RPC через MQ". Список модулів нижче утворює ядро N2O, яке є загальним для MQTT та WebSocket версій: 
+.LP
+
+
+\fIn2o\fR\& — Додаток N2O : MQTT and WS — 10KB
+
+\fIn2o_pi\fR\& — Процеси N2O — 4KB
+
+\fIn2o_proto\fR\& — Цикл N2O : — 1KB
+
+\fIn2o_ring\fR\& — Кільце N2O : Хеш Кільце — 1KB
+.nf
+
+ $ mad app mqtt review
+ $ cd review
+ $ mad dep com pla rep
+ $ open http://127.0.0.1:8000
+        
+.fi
+
+.LP
+
+.LP
+ Список модулів, специфічних для MQTT версії:
+
+\fIn2o_auth\fR\& — N2O MQTT Authentication : модуль аутентифікації MQTT — 1KB
+
+\fIn2o_mqtt\fR\& — MQTT DHT Virtual Node
+.SH  WebSocket
+.LP
+\fICOWBOY\fR\& — невеликий, швидкий та сучасний HTTP сервер, написаний Loïc Hoguin. У цій версії цикл N2O інтегрований як WebSocket \fBcowboy\fR\& обробник, який пересилає всі вхідні повідомлення до N2O. Список модулів, специфічних для WebSocket версії: 
+
+\fIn2o_stream\fR\& — COWBOY та XHR міст
+
+\fIn2o_cowboy\fR\& — COWBOY API
+
+\fIn2o_ws\fR\& — WebSocket DHT Virtual Node
+.nf
+
+ $ mad app web sample
+ $ cd sample
+ $ mad dep com pla rep
+ $ open https://127.0.0.1:8001/app/index.htm
+        
+.fi
+
+.SH  Протоколи
+
+\fIn2o_heart\fR\& — PING protocol
+
+\fIn2o_ftp\fR\& — N2O File Protocol : FTP — 4KB
+
+\fIn2o_nitro\fR\& — N2O Nitrogen Web Framework Protocol :  — 3KB
+.SH  Сервіси
+
+\fIn2o_session\fR\& — бекенд ETS сесій
+
+\fIn2o_secret\fR\& — кодер/декодер AES/CBC-128
+
+\fIn2o_gproc\fR\& — бекенд GPROC MQ
+
+\fIn2o_syn\fR\& — бекенд SYN MQ
+.SH  JavaScript
+
+\fIutf8.js\fR\& — кодер/декодер UTF-8
+
+\fIieee754.js\fR\& — кодер/декодер IEEE-754
+
+\fIbert.js\fR\& — кодер/декодер BERT
+
+\fIn2o.js\fR\& — протокольний цикл N2O
+
+\fIheart.js\fR\& — протокол HEART
+
+\fInitro.js\fR\& — протокол NITRO
+
+\fIftp.js\fR\& — протокол FTP
+
+\fImq.js\fR\& — клієнт MQTT
+.SH  Типова специфікація
+.nf
+
+ -type n2o()       :: #bert{} | #json{} | #binary{} | #default{}.
+ -type cx()        :: #cx{}.
+ -type formatter() :: binary | json | bert | text | default | atom().
+ -type response()  :: { formatter(), binary() }.
+
+ -record(ok,      { data     :: term() }).
+ -record(error    { data     :: term() }.
+ -record(reply,   { msg      :: n2o(), req :: term(), ctx :: cx() } ).
+ -record(unknown, { msg      :: n2o(), req :: term(), ctx :: cx() } ).
+
+ -spec start(#pi{}) -> {pid(),term()} | #error{}.
+ -spec stop(term(),atom()) -> #pi{} | #error{}.
+ -spec proc(atom(),#pi{}) -> term().
+ -spec info(term(),term(),#cx{}) -> #reply{} | #unknown{}.
+
+ -record(pi, { name     :: term(),
+               table    :: atom(),
+               sup      :: atom(),
+               module   :: atom(),
+               state    :: term()  }).
+
+ -record(cx, { handlers  = [] :: list({atom(),atom()}),
+               actions   = [] :: list(tuple()),
+               req       = [] :: [] | term(),
+               module    = [] :: [] | atom(),
+               lang      = [] :: [] | atom(),
+               path      = [] :: [] | binary(),
+               session   = [] :: [] | binary(),
+               formatter = bert :: bert | json | atom(),
+               params    = [] :: [] | list(tuple()),
+               node      = [] :: [] | atom(),
+               client_pid= [] :: [] | term(),
+               state     = [] :: [] | term(),
+               from      = [] :: [] | binary(),
+               vsn       = [] :: [] | binary() }).
+
+ -type memtable()  :: atom().
+ -spec encode(tuple()) -> binary().
+ -spec decode(binary()) -> tuple().
+ -spec session(term(),term()) -> term().
+ -spec session(term()) -> term().
+ -spec cache(memtable(),term(),term()) -> term().
+ -spec cache(memtable(),term()) -> term().
+         
+.fi
