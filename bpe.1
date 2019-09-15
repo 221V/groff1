@@ -1,0 +1,68 @@
+.TH bpe 1 "bpe" "Synrc Research Center" "BPE"
+.SH NAME
+bpe
+.SH  INTRO
+.LP
+ The \fBbpe\fR\& module contains a subset of BPMN API. 
+.SH  SERVICE
+.nf
+load(string()) -> #process{}
+.fi
+
+.nf
+start(#process{},list()) -> {ok,pid()} | {error,any()}.
+.fi
+
+.SH  CONTEXT
+.nf
+process(pid())        -> #process{}.
+.fi
+
+.nf
+complete(pid())       -> {complete,any()}.
+.fi
+
+.nf
+complete(any(),pid()) -> {complete,any()}.
+.fi
+
+.nf
+amend(pid(),any())    -> {complete,any()}.
+.fi
+
+.nf
+event(pid(),any())    -> {complete,any()}.
+.fi
+
+.nf
+hist(pid())           -> list(#hist{}).
+.fi
+
+.SH  ENV
+.nf
+task(Name::list(),#process{})   -> [tuple()] | tuple().
+.fi
+
+.nf
+doc(Record::tuple(),#process{}) -> [tuple()] | tuple().
+.fi
+
+
+
+.nf
+tasks(#process{})  -> list().
+.fi
+
+.nf
+docs(#process{})   -> list().
+.fi
+
+.nf
+events(#process{}) -> list().
+.fi
+
+.LP
+ Retrieves the list of 
+.SH ALSO
+.LP
+\fB\fITASK(1)\fR\&\fR\&
