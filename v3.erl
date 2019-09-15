@@ -75,11 +75,11 @@ head([], A) -> A;
 head([#xmlElement{name=title, content=[#xmlText{value=V} | _]} | _], _) -> V;
 head([_|T], A) -> head(T, A).
 
-gtb({#xmlElement{content=[_, #xmlElement{content=Head}, _, BodyTree | _]}, _}) ->
+gtb({#xmlElement{content=[_, #xmlElement{name=head,content=Head}, _, #xmlElement{name=body}=BodyTree]}, _}) ->
   [ head(Head, ""), BodyTree ];
-gtb({#xmlElement{content=[_, #xmlElement{content=Head}, BodyTree]}, _}) ->
+gtb({#xmlElement{content=[_, #xmlElement{name=head,content=Head}, #xmlElement{name=body}=BodyTree]}, _}) ->
   [ head(Head, ""), BodyTree ];
-gtb({#xmlElement{content=[#xmlElement{content=Head}, BodyTree]}, _}) ->
+gtb({#xmlElement{content=[#xmlElement{name=head,content=Head}, #xmlElement{name=body}=BodyTree]}, _}) ->
   [ head(Head, ""), BodyTree ].
 
 write2new(F, S) ->
